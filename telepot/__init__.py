@@ -467,13 +467,11 @@ class Bot(_BotBase):
         try:
             d = dest if _isfile(dest) else open(dest, 'wb')
 
-            r = api.download((self._token, f['file_path']))
+            r = api.download((self._token, f['file_path']), preload_content=False)
 
-            # Ref:
-            #   http://stackoverflow.com/questions/17285464/whats-the-best-way-to-download-file-using-urllib3
             while 1:
                 data = r.read(self._file_chunk_size)
-                if data is None:
+                if not data:
                     break
                 d.write(data)
         finally:
